@@ -20,7 +20,7 @@ export class CanvasManager {
   autoResize: boolean;
   didAspectUpdate: boolean;
 
-  constructor( divID?: string ) {
+  constructor( pixelRatio: number, divID?: string ) {
 
     this.divID = ( divID !== undefined ) ? divID : `valo-div${_canvasId}`;
     this.canvasID = _canvasId;
@@ -39,7 +39,7 @@ export class CanvasManager {
     this.interactionManager = new InteractionManager( this );
     this.enableInteractions = true;
 
-    this.pixelRatio = process.env.NODE_ENV === 'test' ? 1 : window.devicePixelRatio;
+    this.pixelRatio = process.env.NODE_ENV === 'test' ? 1 : window.devicePixelRatio / pixelRatio;
     this.autoResize = true;
 
     /*

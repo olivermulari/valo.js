@@ -18,8 +18,10 @@ const _m4 = new Matrix4();
 const _clearColor = [ 37, 37, 37, 255 ].map(n => n / 255);
 
 interface WebGLRendererOptions {
+  clearBeforeRender: boolean;
   antialiazing: boolean;
   inspector: boolean;
+  pixelRatio: number;
 }
 
 /**
@@ -34,8 +36,9 @@ export class WebGLRenderer {
   readyForRendering: boolean;
   stopRenderLoopGiven: boolean;
   clearBeforeRender: boolean;
-  previousTime: number;
   antialias: boolean;
+  pixelRatio: number;
+  previousTime: number;
 
   constructor( options?: WebGLRendererOptions ) {
 
@@ -47,11 +50,11 @@ export class WebGLRenderer {
     this.readyForRendering = false;
     this.stopRenderLoopGiven = false;
 
-    this.clearBeforeRender = false;
+    this.clearBeforeRender = options && options.clearBeforeRender ? options.clearBeforeRender : false;
+    this.antialias = options && options.antialiazing ? options.antialiazing : true;
+    this.pixelRatio = options && options.pixelRatio ? options.pixelRatio : 1;
 
     this.previousTime = 0;
-
-    this.antialias = options && options.antialiazing ? options.antialiazing : true;
 
   }
 
@@ -61,7 +64,7 @@ export class WebGLRenderer {
    */
   attachTo( divId?: string ): boolean {
 
-    const canvas = new CanvasManager( divId );
+    const canvas = new CanvasManager( this.pixelRatio, divId );
 
     if ( this.inspector !== undefined ) {
       this.inspector._init( canvas );

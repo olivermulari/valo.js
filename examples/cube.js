@@ -15,6 +15,7 @@ export function cube() {
     clearBeforeRender: true,
     antialiazing: true,
     inspector: false,
+    pixelRatio: 2
   });
 
   renderer.attachTo('scene-div');
@@ -61,11 +62,11 @@ export function cube() {
 
   const _yAxis = new VALO.Vector3(0, 1, 0);
 
-  //renderer.runRenderLoop(() => {
+  renderer.runRenderLoop(() => {
 
     renderer.render(scene);
     camera.position.applyAxisAngle(_yAxis, 0.01);
     camera.forceUpdate();
 
-  //});
+  });
 }
