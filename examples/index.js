@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+import { cube } from './cube.js';
 import VALO from '../src/index';
 
 function createScene() {
@@ -58,4 +59,4 @@ function createScene() {
   });
 }
 
-window.addEventListener('DOMContentLoaded', createScene);
+window.addEventListener('DOMContentLoaded', cube);

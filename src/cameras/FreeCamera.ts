@@ -86,16 +86,4 @@ export class FreeCamera extends Camera {
 
   }
 
-  _onRotationChangeCallback(): void {
-
-    this.worldMatrixNeedsUpdate = true;
-
-  }
-
-  _onPositionChangeCallBack(): void {
-
-    this.worldMatrixNeedsUpdate = true;
-
-  }
-
 }

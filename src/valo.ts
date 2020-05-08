@@ -4,6 +4,7 @@ import { SphereGeometry } from './geometries/SphereGeometry';
 import { WebGLRenderer } from './renderers/WebGLRenderer';
 import { Scene } from './scenes/Scene';
 import { StandardMaterial } from './materials/StandardMaterial';
+import { Color } from './materials/Color';
 import { NaiveMaterial } from './materials/NaiveMaterial';
 import { Mesh } from './objects/Mesh';
 
@@ -34,6 +35,7 @@ class VALO {
   static PlaneGeometry = PlaneGeometry;
   static SphereGeometry = SphereGeometry;
 
+  static Color = Color;
   static NaiveMaterial = NaiveMaterial;
   static StandardMaterial = StandardMaterial;
 

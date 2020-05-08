@@ -35,4 +35,10 @@ export class Mesh extends Object3D {
 
   }
 
+  clone(): Mesh {
+
+    return new Mesh(this.geometry, this.material);
+
+  }
+
 }

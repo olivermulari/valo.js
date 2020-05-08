@@ -5,6 +5,7 @@ import { WebGLUtils } from './WebGLUtils';
 import { NaiveMaterial } from '../../materials/NaiveMaterial';
 import { StandardMaterial } from '../../materials/StandardMaterial';
 import { UBO } from './UBO';
+import { Color } from '../../materials/Color';
 
 /**
  * Creates custom WebGLPrograms and shaders according to needs and keeps track of them
@@ -39,10 +40,7 @@ export class ProgramManager {
       return false;
     }
 
-    const positionsMatch = prg.hasPositions && geometry.hasPositions;
-    const normalsMatch = prg.hasNormals && geometry.hasNormals;
-    
-    return (positionsMatch && normalsMatch);
+    return prg.targetMaterial === mesh.material.type;
     
   }
 
@@ -55,6 +53,7 @@ export class ProgramManager {
 
     // check if the program is already created and return that program
 
+    // TODO: TAKES WAY TOO LONG
     program = this.programs.find(prg => this.programAndMeshMatches(prg, mesh));
     if (program) { return program; }
 
@@ -69,7 +68,44 @@ export class ProgramManager {
     let vert;
     let frag;
 
-    if ( mesh.material instanceof NaiveMaterial ) {
+    if ( mesh.material instanceof Color ) {
+      
+      vert = [
+
+        '#version 300 es',
+
+        'in vec4 a_position;',
+
+        'uniform Transform{',
+          'mat4 world;',
+          'mat4 worldViewProjection;',
+          'mat4 worldInverseTranspose;',
+        '};',
+
+        'void main() {',
+          'gl_Position = worldViewProjection * a_position;',
+        '}'
+
+      ].join('\n');
+
+      frag = [
+
+        '#version 300 es',
+
+        'precision mediump float;',
+        
+        'uniform vec4 u_color;',
+
+        'out vec4 outColor;',
+
+        'void main() {',
+
+          'outColor = u_color;',
+        '}'
+
+      ].join('\n');
+
+    } else if ( mesh.material instanceof NaiveMaterial ) {
 
       vert = [
 
@@ -206,19 +242,33 @@ export class ProgramManager {
     const shader = WebGLUtils.createShaderProgramFromScripts(gl, vert, frag);
     if (!shader) { console.error('ProgramManger.figureProgram();'); return;}
 
-    program = new Program(gl, shader);
-    program.setAttribLocations(gl, normals);
-
+    program = new Program(gl, shader, mesh.material.type);
     program.prepareUniformBlocks(
       UBO.cache['Transform'], 0,
-      UBO.cache['Material'], 1,
-      UBO.cache['Light'], 2,
     );
 
-    program.prepareUniforms(
-      'u_reverseLightDirection', 'vec3',
-      'u_viewPosition', 'vec3',
-    );
+    if (mesh.material instanceof Color) {
+      
+      program.setAttribLocations(gl, false);
+
+      program.prepareUniforms(
+        'u_color', 'vec4',
+      );
+
+    } else if (mesh.material instanceof StandardMaterial) {
+
+      program.setAttribLocations(gl, true);
+
+      program.prepareUniforms(
+        'u_reverseLightDirection', 'vec3',
+        'u_viewPosition', 'vec3',
+      );
+      program.prepareUniformBlocks(
+        UBO.cache['Material'], 1,
+        UBO.cache['Light'], 2,
+      );
+
+    }
 
     this.programs.push(program);
 
@@ -267,7 +317,7 @@ export class ProgramManager {
     const shader = WebGLUtils.createShaderProgramFromScripts( gl, vert, frag );
     if (!shader) { console.error('ProgramManger.figureProgram();'); return;}
 
-    const program = new Program(gl, shader);
+    const program = new Program(gl, shader, 'helper');
     program.setAttribLocations(gl, false);
     program.prepareUniforms(
       'u_worldViewProjection', 'mat4',

@@ -79,14 +79,35 @@ export class Camera extends Object3D {
     
     this.perspectiveNeedsUpdate = true;
 
+    this.scene.viewMatrixNeedsUpdate = true;
+
   }
 
-  update(): void { return; }
+  forceUpdate(): void {
+
+    this.worldMatrixNeedsUpdate = true;
+    this.scene.viewMatrixNeedsUpdate = true;
+
+  }
 
   updateInteractions( manager: InteractionManager ): void { manager; }
 
   _onKeyDownCallBack( event: KeyboardEvent ): void { event; }
 
   _onKeyUpCallBack( event: KeyboardEvent ): void { event; }
+
+  _onRotationChangeCallback(): void {
+
+    this.worldMatrixNeedsUpdate = true;
+    this.scene.viewMatrixNeedsUpdate = true;
+
+  }
+
+  _onPositionChangeCallBack(): void {
+
+    this.worldMatrixNeedsUpdate = true;
+    this.scene.viewMatrixNeedsUpdate = true;
+
+  }
 
 }

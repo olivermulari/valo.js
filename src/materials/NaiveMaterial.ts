@@ -10,6 +10,7 @@ export class NaiveMaterial extends Material {
     super();
 
     this.color = color;
+    this.type = 'naive';
 
   }
   

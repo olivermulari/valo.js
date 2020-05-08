@@ -67,11 +67,11 @@ export class Geometry {
    */
   bindBuffers(gl: WebGL2RenderingContext, program: Program): void {
 
-    if (this.hasPositions) {
+    if (this.hasPositions && program.A_POSITION !== -1) {
       this.attributes[ATTRIBUTE_LOCATION.POSITION].bindBufferWithProgram(gl, this, program);
     }
 
-    if (this.hasNormals) {
+    if (this.hasNormals && program.A_NORMAL !== -1) {
       this.attributes[ATTRIBUTE_LOCATION.NORMAL].bindBufferWithProgram(gl, this, program);
     }
 

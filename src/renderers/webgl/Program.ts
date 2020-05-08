@@ -7,10 +7,9 @@ export class Program {
   uniforms: { [key: string]: { location: WebGLUniformLocation; type: string } }; 
   A_POSITION: number;
   A_NORMAL: number;
-  hasPositions: boolean;
-  hasNormals: boolean;
+  targetMaterial: string;
 
-  constructor( gl: WebGL2RenderingContext, shaderProgram: WebGLProgram ) {
+  constructor( gl: WebGL2RenderingContext, shaderProgram: WebGLProgram, target: string ) {
 
     this.gl = gl;
     this.WebGLProgram = shaderProgram;
@@ -20,8 +19,7 @@ export class Program {
     this.A_POSITION = -1;
     this.A_NORMAL = -1;
 
-    this.hasPositions = false;
-    this.hasNormals = false;
+    this.targetMaterial = target;
 
   }
 
@@ -117,17 +115,7 @@ export class Program {
       const normal = gl.getAttribLocation(program, 'a_normal');
       this.A_NORMAL = normal;
     }
-
-    // this may not be the most accurat way of deciding does the program have attributes
-    // program manager is optional
     
-    if (this.A_POSITION !== -1) {
-      this.hasPositions = true;
-    }
-    if (this.A_NORMAL !== -1) {
-      this.hasNormals = true;
-    }
-
   }
 
   destroy(): void {

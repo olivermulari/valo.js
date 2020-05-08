@@ -16,6 +16,7 @@ export class StandardMaterial extends Material {
     this.diffuse = new Vector3(0.07568, 0.61424, 0.07568);
     this.specular = new Vector3(0.633, 0.727811, 0.633);
     this.shininess = 26;
+    this.type = 'standard';
 
   }
   

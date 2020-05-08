@@ -11,6 +11,7 @@ import { StandardMaterial } from '../materials/StandardMaterial';
 import { UBO } from './webgl/UBO';
 import { Uniform } from './webgl/Uniform';
 import { Light } from '../lights/Light';
+import { Color } from '../materials/Color';
 
 const _m4 = new Matrix4();
 
@@ -210,30 +211,42 @@ export class WebGLRenderer {
 
     // uniforms (could be done with fever checks)
 
-    if (!(material instanceof StandardMaterial) || scene.activeCamera === null) return;
+    if (scene.activeCamera === null) return;
 
+    // general transforms
     const transform = UBO.cache['Transform'];
     transform.update('world', obj.worldMatrix.elements);
     transform.update('worldViewProjection', obj.viewMatrix.elements);
-    _m4.inverse( obj.worldMatrix );
-    _m4.transponse( _m4 );
-    transform.update('worldInverseTranspose', _m4.elements);
 
-    const mat = UBO.cache['Material'];
-    mat.update('matAmbient', material.ambient.getAsArray());
-    mat.update('matDiffuse', material.diffuse.getAsArray());
-    mat.update('matSpecular', [...material.specular.getAsArray(), material.shininess]);
+    if (material instanceof Color) {
 
-    if (Light.cache.amount === 1) {
-      const directionalLight = Light.cache.arr[0];
-      const light = UBO.cache['Light'];
-      light.update('lightAmbient', directionalLight.ambient.getAsArray());
-      light.update('lightDiffuse', directionalLight.diffuse.getAsArray());
-      light.update('lightSpecular', directionalLight.specular.getAsArray());
-      program.preRender('u_reverseLightDirection', directionalLight.reverseDirection.getAsArray());
+      // only color
+      program.preRender('u_color', material.color);
+
+    } else if (material instanceof StandardMaterial) {
+
+      // transforms for lighting
+      _m4.inverse( obj.worldMatrix );
+      _m4.transponse( _m4 );
+      transform.update('worldInverseTranspose', _m4.elements);
+  
+      const mat = UBO.cache['Material'];
+      mat.update('matAmbient', material.ambient.getAsArray());
+      mat.update('matDiffuse', material.diffuse.getAsArray());
+      mat.update('matSpecular', [...material.specular.getAsArray(), material.shininess]);
+  
+      if (Light.cache.amount === 1) {
+        const directionalLight = Light.cache.arr[0];
+        const light = UBO.cache['Light'];
+        light.update('lightAmbient', directionalLight.ambient.getAsArray());
+        light.update('lightDiffuse', directionalLight.diffuse.getAsArray());
+        light.update('lightSpecular', directionalLight.specular.getAsArray());
+        program.preRender('u_reverseLightDirection', directionalLight.reverseDirection.getAsArray());
+      }
+
+      program.preRender('u_viewPosition', scene.activeCamera.position.getAsArray());
+
     }
-
-    program.preRender('u_viewPosition', scene.activeCamera.position.getAsArray());
 
     // DRAW THE GEOMETRY
 

@@ -7,12 +7,13 @@ import { Mesh } from '../../objects/Mesh';
 import { Material } from '../../materials/Material';
 import { NaiveMaterial } from '../../materials/NaiveMaterial';
 import { StandardMaterial } from '../../materials/StandardMaterial';
+import { Color } from '../../materials/Color';
 
 export interface RenderItem {
 	id: number;
 	mesh: Mesh;
 	geometry: Geometry;
-	material: Material | NaiveMaterial | StandardMaterial;
+	material: Material | NaiveMaterial | StandardMaterial | Color;
 	program: Program;
 	//renderOrder: number;
 	//z: number;
