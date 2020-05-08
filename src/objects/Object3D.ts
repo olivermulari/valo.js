@@ -32,10 +32,8 @@ export class Object3D {
   quaternion: Quaternion;
   scale: Vector3;
   worldMatrix: Matrix4;
-  viewMatrix: Matrix4;
   isObject3D: true;
   worldMatrixNeedsUpdate: boolean;
-  viewMatrixNeedsUpdate: boolean;
   isInFrustum: boolean;
   isMesh: boolean;
   isCamera: boolean;
@@ -51,11 +49,9 @@ export class Object3D {
     this.scale = new Vector3(1, 1, 1);
 
     this.worldMatrix = new Matrix4();
-    this.viewMatrix = new Matrix4();
 
     this.isObject3D = true;
     this.worldMatrixNeedsUpdate = true;
-    this.viewMatrixNeedsUpdate = true;
 
     this.isInFrustum = false;
     this.isMesh = false;
@@ -74,16 +70,6 @@ export class Object3D {
     m.compose( translation, this.quaternion, scale );
 
     this.worldMatrixNeedsUpdate = false;
-
-  }
-
-  updateViewMatrix( scene: Scene ): void {
-
-    const m = this.viewMatrix.copy( scene.viewProjectionMatrix );
-
-    this.viewMatrix = m.multiply( m, this.worldMatrix );
-
-    this.viewMatrixNeedsUpdate = false;
 
   }
 
@@ -224,8 +210,6 @@ export class Object3D {
   _onRotationChangeCallback(): void {
 
     this.worldMatrixNeedsUpdate = true;
-
-    this.viewMatrixNeedsUpdate = true;
 
   }
 
