@@ -2,8 +2,7 @@ import { Scene } from '../scenes/Scene';
 import { Camera } from './Camera';
 import { Vector3 } from '../math/Vector3';
 
-
-const upV3 = new Vector3(0, 1, 0);
+const _yAxis = new Vector3(0, 1, 0);
 
 export class TargetCamera extends Camera {
 
@@ -19,6 +18,12 @@ export class TargetCamera extends Camera {
 
   updateWorldMatrix(): void {
 
+    /*
+    // BUG: take rotation into account!!
+    this.quaternion.setFromEuler( this.rotation );
+    this.target.applyQuaternion( this.quaternion );
+    */
+
     this.lookAt( this.target );
 
     this.worldMatrixNeedsUpdate = false;
@@ -27,14 +32,15 @@ export class TargetCamera extends Camera {
 
   }
 
-  lookAt( target: Vector3 ): void {
+  lookAt( target: Vector3 ): this {
 
     const cameraPosition = this.position;
-    const up = upV3;
 
     const m = this.inverseWorldMatrix;
     
-    m.inverse( m.lookAt(cameraPosition, target, up) );
+    m.inverse( m.lookAt(cameraPosition, target, _yAxis) );
+
+    return this; 
 
   }
 

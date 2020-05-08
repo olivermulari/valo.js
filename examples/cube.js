@@ -6,7 +6,7 @@ import VALO from '../src/index';
 function map(t, x, y, a, b) {
   const i1 = y - x;
   const i2 = b - a;
-  return a + (t - x) / i1 * i2;
+  return a + (t - x) * (i2 / i1);
 }
 
 export function cube() {
@@ -22,7 +22,8 @@ export function cube() {
 
   const scene = new VALO.Scene();
 
-  const camera = new VALO.Camera(scene);
+  const camera = new VALO.TargetCamera(scene);
+  camera.target = new VALO.Vector3(0, 0, 0);
   camera.translateZ( -50 );
   camera.rotateY( Math.PI );
   camera.setActive();
@@ -65,8 +66,8 @@ export function cube() {
   renderer.runRenderLoop(() => {
 
     renderer.render(scene);
-    camera.position.applyAxisAngle(_yAxis, 0.01);
-    camera.forceUpdate();
+    camera.position.applyAxisAngle(_yAxis, 0.015);
+    camera.update();
 
   });
 }

@@ -12,6 +12,8 @@ import { DirectionalLight } from './lights/DirectionalLight';
 
 import { Camera } from './cameras/Camera';
 import { FreeCamera } from './cameras/FreeCamera';
+import { TargetCamera } from './cameras/TargetCamera';
+
 
 import { Vector3 } from './math/Vector3';
 
@@ -34,24 +36,17 @@ class VALO {
   static BoxGeometry = BoxGeometry;
   static PlaneGeometry = PlaneGeometry;
   static SphereGeometry = SphereGeometry;
-
   static Color = Color;
   static NaiveMaterial = NaiveMaterial;
   static StandardMaterial = StandardMaterial;
-
   static DirectionalLight = DirectionalLight;
-
   static Mesh = Mesh;
-
   static WebGLRenderer = WebGLRenderer;
-
   static Scene = Scene;
-
   static Camera = Camera;
   static FreeCamera = FreeCamera;
-
+  static TargetCamera = TargetCamera;
   static HelperManager = HelperManager; //DEPRECATE from core
-
   static Vector3 = Vector3;
   
 }

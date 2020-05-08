@@ -83,10 +83,19 @@ export class Camera extends Object3D {
 
   }
 
-  forceUpdate(): void {
+  update(): void {
 
     this.worldMatrixNeedsUpdate = true;
+
     this.scene.viewMatrixNeedsUpdate = true;
+
+  }
+
+  forceUpdate(): void {
+
+    this.update();
+    this.updatePerspective();
+    this.updateWorldMatrix();
 
   }
 
@@ -99,6 +108,7 @@ export class Camera extends Object3D {
   _onRotationChangeCallback(): void {
 
     this.worldMatrixNeedsUpdate = true;
+
     this.scene.viewMatrixNeedsUpdate = true;
 
   }
@@ -106,6 +116,7 @@ export class Camera extends Object3D {
   _onPositionChangeCallBack(): void {
 
     this.worldMatrixNeedsUpdate = true;
+
     this.scene.viewMatrixNeedsUpdate = true;
 
   }
