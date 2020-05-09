@@ -4,9 +4,7 @@
 import VALO from '../src/index';
 
 function map(t, x, y, a, b) {
-  const i1 = y - x;
-  const i2 = b - a;
-  return a + (t - x) * (i2 / i1);
+  return a + (t - x) * (b - a) / (y - x);
 }
 
 export function cube() {
@@ -43,10 +41,9 @@ export function cube() {
     for (let xi = 0; xi < N; xi++) {
       for (let zi = 0; zi < N; zi++) {
         if (yi == 0 || xi == 0 || zi == 0 || yi == N-1 || xi == N-1 || zi == N-1) {
-          const loPos = (size/2) - W / 2, hiPos = ((N-1) * size + size/2) - W / 2;
-          const r = map(xi, loPos, hiPos, 0, 1);
-          const g = map(yi, loPos, hiPos, 0, 1);
-          const b = map(zi, loPos, hiPos, 0, 1);
+          const r = map(xi, 0, N-1, 0, 1);
+          const g = map(yi, 0, N-1, 0, 1);
+          const b = map(zi, 0, N-1, 0, 1);
           const mat = new VALO.Color(r, g, b);
           const bc = box.clone();
           bc.position.x = (xi * size + size/2) - W / 2;
