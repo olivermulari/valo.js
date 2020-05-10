@@ -115,6 +115,16 @@ export class Object3D {
 
   }
 
+  applyScale( amount: number ): this {
+
+    this.scale.multiply( amount );
+
+    this._onRotationChangeCallback();
+
+    return this;
+
+  }
+
   getDirection(): Vector3 {
 
     return _v3.copy( _inFront ).applyQuaternion( this.quaternion );
@@ -208,6 +218,12 @@ export class Object3D {
   }
 
   _onRotationChangeCallback(): void {
+
+    this.worldMatrixNeedsUpdate = true;
+
+  }
+
+  _onScaleChangeCallback(): void {
 
     this.worldMatrixNeedsUpdate = true;
 

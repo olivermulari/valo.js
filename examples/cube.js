@@ -50,6 +50,10 @@ export function cube() {
           bc.position.y = (yi * size + size/2) - W / 2;
           bc.position.z = (zi * size + size/2) - W / 2; 
           bc.position.add(center);
+
+          const scaleFactor = center.clone().add(bc.position).mag();
+          bc.applyScale(map(scaleFactor, 10, 15, 0.4, 1.0));
+
           bc.material = mat;
           scene.add(bc);
           boxes.push(bc);
@@ -64,6 +68,7 @@ export function cube() {
 
     renderer.render(scene);
     camera.position.applyAxisAngle(_yAxis, 0.015);
+    camera.position.applyAxisAngle(new VALO.Vector3(1, 0, 0), 0.015);
     camera.update();
 
   });
