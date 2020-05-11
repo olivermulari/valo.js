@@ -1,4 +1,5 @@
 import { Uniform } from './Uniform';
+import { Vector3 } from '../../math/Vector3';
 
 interface UBOElement {
   name: string;
@@ -58,11 +59,13 @@ export class UBO {
     
 	}
 
-	update(name: string, data: Array<number> | Float32Array | number): this{
+	update(name: string, data: Array<number> | Float32Array | Vector3 | number): this{
 
 		if( !(data instanceof Float32Array) ) {
 			if (Array.isArray(data)) data = new Float32Array(data);
-			else data = new Float32Array([data]);
+			else if (data instanceof Vector3) {
+				data = new Float32Array([data.x, data.y, data.z]);
+			} else data = new Float32Array([data]);
     }
 
 		this.gl.bindBuffer(this.gl.UNIFORM_BUFFER, this.buffer);
