@@ -4,6 +4,7 @@ import { Geometry } from '../geometries/Geometry';
 import { Material } from '../materials/Material';
 import { BoundingBox } from './BoundingBox';
 import { Scene } from '../scenes/Scene';
+import { RenderItem } from '../renderers/webgl/RenderList';
 
 export class Mesh extends Object3D {
 
@@ -13,6 +14,8 @@ export class Mesh extends Object3D {
   material: Material;
   boundingBox: BoundingBox;
   children: Array<Mesh>;
+  _renderItem?: RenderItem;
+  _clonedFrom?: Mesh;
 
   constructor( geometry: Geometry, material: Material ) {
 
@@ -24,6 +27,8 @@ export class Mesh extends Object3D {
     this.material = material;
     this.boundingBox = new BoundingBox( this );
     this.children = [];
+
+    this._renderItem;
 
   }
 
@@ -53,7 +58,11 @@ export class Mesh extends Object3D {
 
   clone(): Mesh {
 
-    return new Mesh(this.geometry, this.material);
+    const mesh = new Mesh(this.geometry, this.material);
+
+    mesh._clonedFrom = this;
+
+    return mesh;
 
   }
 

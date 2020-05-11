@@ -17,8 +17,7 @@ export class Scene {
   viewProjectionMatrix: Matrix4;
   viewFrustum: Frustum;
   viewMatrixNeedsUpdate: boolean;
-  //renderLists: Array<RenderList>;
-  renderList: RenderList;
+  renderLists: RenderList[];
   meshListDidUpdate: boolean;
   buffersNeedUpdate: boolean;
   helperManager?: HelperManager;
@@ -36,8 +35,7 @@ export class Scene {
     this.viewFrustum = new Frustum();
     this.viewMatrixNeedsUpdate = true; // TODO: check when it is necessary
 
-    //this.renderLists = [];
-    this.renderList = new RenderList();
+    this.renderLists = [];
     
     this.meshListDidUpdate = false;
     this.buffersNeedUpdate = false;
@@ -78,7 +76,8 @@ export class Scene {
 
       this.meshes.splice(idx, 1);
 
-      this.renderList.delete(mesh);
+      //this.renderLists.delete(mesh);
+      console.error('Deleting mesh from render lists is not yet possible');
 
       this._onListUpdate();
 

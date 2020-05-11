@@ -15,8 +15,6 @@ export interface RenderItem {
 	geometry: Geometry;
 	material: Material | NaiveMaterial | StandardMaterial | Color;
 	program: Program;
-	//renderOrder: number;
-	//z: number;
 }
 
 /**
@@ -28,25 +26,31 @@ export interface RenderItem {
  */
 export class RenderList {
 
+  program: Program;
   items: Array<RenderItem>;
 
-  constructor() {
+  constructor( program: Program ) {
 
+    this.program = program;
     this.items = [];
     
   }
 
-  push( mesh: Mesh, program: Program ): void {
+  push( mesh: Mesh ): void {
 
-    this.items.push({
+    const item = {
 
       id: mesh.id,
       mesh: mesh,
       material: mesh.material,
       geometry: mesh.geometry,
-      program: program,
+      program: this.program,
       
-    });
+    };
+
+    mesh._renderItem = item;
+
+    this.items.push(item);
 
   }
   
@@ -55,7 +59,7 @@ export class RenderList {
    * 
    * TODO: update correctly in deletion
    */
-  checkIfUpdate( gl: WebGL2RenderingContext, programManager: ProgramManager, scene: Scene ): void {
+  static checkIfUpdate( gl: WebGL2RenderingContext, programManager: ProgramManager, scene: Scene ): void {
 
     if ( scene.meshListDidUpdate ) {
 
@@ -63,7 +67,7 @@ export class RenderList {
 
       scene.meshes.forEach( mesh => {
 
-        if ( !this.items.find( item => item.id === mesh.id ) ) {
+        if ( mesh._renderItem === undefined ) {
 
           missingMeshes.push(mesh);
 
@@ -73,23 +77,25 @@ export class RenderList {
 
       missingMeshes.forEach( mesh => {
 
-        const program = programManager.figureProgramForMesh( mesh );
+        const list = scene.renderLists.find(l => l.program.targetMaterial == mesh.material.type );
 
-        if (!program) { console.error('VALO.RenderList: checkIfUpdate() program was not complied correctly'); return;}
+        if ( list !== undefined ) {
 
-        this.push( mesh, program );
+          list.push( mesh );
 
-      });
+        } else {
 
-    }
+          // create new render list
 
-    if ( scene.buffersNeedUpdate ) {
+          const program = programManager.createProgramForMesh( mesh );
 
-      this.items.forEach(item => {
-        
-        const geometry = item.geometry;
-        geometry.setBuffers(gl);
-        geometry.bindBuffers(gl, item.program);
+          if (!program) { console.error('VALO.RenderList: checkIfUpdate() program was not complied correctly'); return;}
+
+          const renderList = new RenderList( program );
+          renderList.push( mesh );
+          scene.renderLists.push( renderList );
+
+        }
 
       });
 

@@ -4,6 +4,7 @@ import { Inspector } from '../inspector/Inspector';
 import { ProgramManager } from './webgl/ProgramManager';
 import { WebGLUtils } from './webgl/WebGLUtils';
 import { RenderItem } from './webgl/RenderList';
+import { RenderList } from './webgl/RenderList';
 import { ATTRIBUTE_LOCATION } from '../geometries/Geometry';
 import { HelperManager } from '../helpers/HelperManager';
 import { Matrix4 } from '../math/Matrix4';
@@ -162,14 +163,34 @@ export class WebGLRenderer {
 
     // check scene to be drawn
 
-    scene.renderList.checkIfUpdate(gl, this.programManager, scene);
+    RenderList.checkIfUpdate(gl, this.programManager, scene);
+
+    // update buffers in lists
+
+    if ( scene.buffersNeedUpdate ) {
+
+      scene.renderLists.forEach( list => {
+
+        list.items.forEach(item => {
+        
+          const geometry = item.geometry;
+          geometry.setBuffers(gl);
+          geometry.bindBuffers(gl, item.program);
+  
+        });
+
+      });
+
+    }
 
     // RENDER
 
     // sometimes multile lists
-    //scene.renderLists.forEach(list => {
+    scene.renderLists.forEach(list => {
 
-      scene.renderList.items.forEach(item => {
+      gl.useProgram(list.program.WebGLProgram);
+
+      list.items.forEach(item => {
 
         if (item.mesh.isInFrustum) {
 
@@ -177,13 +198,17 @@ export class WebGLRenderer {
 
         } else {
 
-          // render shadows?
+          // nothing
 
         }
 
+        // render shadows?
+
       });
 
-    //});
+      gl.useProgram(null);
+
+    });
 
     // after object render check if bounding box is visible and should be rendered
 
@@ -207,10 +232,6 @@ export class WebGLRenderer {
     const program = item.program;
 
     let count = 0;
-
-    // program
-
-    gl.useProgram(program.WebGLProgram);
 
     // uniforms (could be done with fever checks)
 
@@ -287,8 +308,6 @@ export class WebGLRenderer {
 
     // cleanup
     gl.bindVertexArray(null);
-
-    // do shader cleanup
 
   }
 

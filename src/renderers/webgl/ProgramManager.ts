@@ -44,20 +44,12 @@ export class ProgramManager {
     
   }
 
-  figureProgramForMesh( mesh: Mesh ): Program | undefined {
+  createProgramForMesh( mesh: Mesh ): Program | undefined {
+
+    let program = null;
 
     const gl = this.renderer.gl;
     if (!gl) return;
-
-    let program: Program | undefined;
-
-    // check if the program is already created and return that program
-
-    // TODO: TAKES WAY TOO LONG
-    program = this.programs.find(prg => this.programAndMeshMatches(prg, mesh));
-    if (program) { return program; }
-
-    // else CREATE PROGRAM
 
     const geometry = mesh.geometry;
     const normals = geometry.hasNormals;
