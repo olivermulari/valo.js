@@ -43,11 +43,12 @@ export class Program {
 
     if (!vao) { console.error('VALO.Mesh: renderItem() has no VerexArrayObject'); return; }
 
-    gl.bindVertexArray(null);
+    //gl.bindVertexArray(null);
     gl.bindVertexArray(vao);
 
     if (indices.array) {
 
+      //gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices.buffer);
 
     }
