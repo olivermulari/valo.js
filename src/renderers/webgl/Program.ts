@@ -1,4 +1,6 @@
 import { UBO } from './UBO';
+import { Geometry } from '../../geometries/Geometry';
+import { ATTRIBUTE_LOCATION } from '../../geometries/Geometry';
 
 export class Program {
 
@@ -8,6 +10,7 @@ export class Program {
   A_POSITION: number;
   A_NORMAL: number;
   targetMaterial: string;
+  _bindedGeometryId: number;
 
   constructor( gl: WebGL2RenderingContext, shaderProgram: WebGLProgram, target: string ) {
 
@@ -20,6 +23,47 @@ export class Program {
     this.A_NORMAL = -1;
 
     this.targetMaterial = target;
+    this._bindedGeometryId = -1;
+
+  }
+
+  /**
+   * Binds the chosen geometry only if it is not binded yet.
+   * Unbinds the previous vao and leaves current vao binded.
+   */
+  bindVAO( gl: WebGL2RenderingContext, geometry: Geometry ): void {
+
+    if (geometry.id === this._bindedGeometryId) {
+      return;
+    }
+
+    const attributes = geometry.attributes;
+    const vao = geometry.vao;
+    const indices = attributes[ATTRIBUTE_LOCATION.INDICES];
+
+    if (!vao) { console.error('VALO.Mesh: renderItem() has no VerexArrayObject'); return; }
+
+    gl.bindVertexArray(null);
+    gl.bindVertexArray(vao);
+
+    if (indices.array) {
+
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices.buffer);
+
+    }
+
+    this._bindedGeometryId = geometry.id;
+
+  }
+
+  /**
+   * Unbinds element array buffer and vao
+   */
+  unBindVAO( gl: WebGL2RenderingContext ): void {
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+    gl.bindVertexArray(null);
+    this._bindedGeometryId = -1;
 
   }
 

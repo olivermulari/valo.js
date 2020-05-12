@@ -106,6 +106,7 @@ class Uint16BufferElementAttribute extends BufferAttribute {
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
     this.buffer = buffer;
 

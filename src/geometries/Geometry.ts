@@ -7,11 +7,14 @@ export const ATTRIBUTE_LOCATION = {
   NORMAL: 2,
 };
 
+let _geometryID = 0;
+
 /**
  * Geometry class that utilises buffers to store data
  */
 export class Geometry {
 
+  id: number;
   vao: WebGLVertexArrayObject | null;
   attributes: { [key: number]: BufferAttribute };
   amountOfVertices: number;
@@ -22,6 +25,8 @@ export class Geometry {
   isBuffersBind: boolean;
 
   constructor() {
+
+    this.id = ++_geometryID;
 
     this.vao = null;
     this.attributes = {};

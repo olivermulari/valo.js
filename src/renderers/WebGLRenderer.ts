@@ -5,7 +5,7 @@ import { ProgramManager } from './webgl/ProgramManager';
 import { WebGLUtils } from './webgl/WebGLUtils';
 import { RenderItem } from './webgl/RenderList';
 import { RenderList } from './webgl/RenderList';
-import { ATTRIBUTE_LOCATION } from '../geometries/Geometry';
+import { ATTRIBUTE_LOCATION, Geometry } from '../geometries/Geometry';
 import { HelperManager } from '../helpers/HelperManager';
 import { Matrix4 } from '../math/Matrix4';
 import { StandardMaterial } from '../materials/StandardMaterial';
@@ -210,6 +210,8 @@ export class WebGLRenderer {
 
       });
 
+      // unbind
+      list.program.unBindVAO(gl);
       gl.useProgram(null);
 
     });
@@ -234,8 +236,6 @@ export class WebGLRenderer {
     const geometry = item.geometry;
     const material = item.material;
     const program = item.program;
-
-    let count = 0;
 
     // uniforms (could be done with fever checks)
 
@@ -279,38 +279,22 @@ export class WebGLRenderer {
 
     const primitiveType = gl.TRIANGLES;
     const offset = 0;
+    const indices = geometry.attributes[ATTRIBUTE_LOCATION.INDICES];
 
-    // attributes
-      
-    const attributes = geometry.attributes;
-    const vao = geometry.vao;
-    const indices = attributes[ATTRIBUTE_LOCATION.INDICES];
-
-    if (!vao) { console.error('VALO.Mesh: renderItem() has no VerexArrayObject'); return; }
-
-    gl.bindVertexArray(vao);
-
-    // check indices last
+    program.bindVAO(gl, geometry);
+    let count = 0;
 
     if (indices.array) {
 
       count = indices.array.length;
-
-      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices.buffer);
-
       gl.drawElements(primitiveType, count, gl.UNSIGNED_SHORT, offset);
-
-      // clean
-      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
     } else {
 
+      count = geometry.amountOfVertices;
       gl.drawArrays(primitiveType, offset, count);
 
     }
-
-    // cleanup
-    gl.bindVertexArray(null);
 
   }
 
