@@ -258,20 +258,20 @@ export class WebGLRenderer {
       transform.update('worldInverseTranspose', _m4.elements);
   
       const mat = UBO.cache['Material'];
-      mat.update('matAmbient', material.ambient.getAsArray());
-      mat.update('matDiffuse', material.diffuse.getAsArray());
-      mat.update('matSpecular', [...material.specular.getAsArray(), material.shininess]);
+      mat.update('matAmbient', material.ambient);
+      mat.update('matDiffuse', material.diffuse);
+      mat.update('matSpecular', [material.specular.x, material.specular.y, material.specular.z, material.shininess]);
   
       if (Light.cache.amount === 1) {
         const directionalLight = Light.cache.arr[0];
         const light = UBO.cache['Light'];
-        light.update('lightAmbient', directionalLight.ambient.getAsArray());
-        light.update('lightDiffuse', directionalLight.diffuse.getAsArray());
-        light.update('lightSpecular', directionalLight.specular.getAsArray());
-        program.preRender('u_reverseLightDirection', directionalLight.reverseDirection.getAsArray());
+        light.update('lightAmbient', directionalLight.ambient);
+        light.update('lightDiffuse', directionalLight.diffuse);
+        light.update('lightSpecular', directionalLight.specular);
+        program.preRender('u_reverseLightDirection', directionalLight.reverseDirection);
       }
 
-      program.preRender('u_viewPosition', scene.activeCamera.position.getAsArray());
+      program.preRender('u_viewPosition', scene.activeCamera.position);
 
     }
 
@@ -345,9 +345,6 @@ export class WebGLRenderer {
 
         const vao = box.geometry.vao;
         if (!vao) {console.error('BoundingBox has no VerexArrayObject'); return;}
-
-        // uniforms
-        const obj = box.mesh;
 
         // Set the matrix.
         const transform = UBO.cache['Transform'];

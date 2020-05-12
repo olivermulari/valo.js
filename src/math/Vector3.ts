@@ -9,25 +9,11 @@ export class Vector3 {
   y: number;
   z: number;
 
-  array: Array<number>;
-
   constructor( x?: number, y?: number, z?: number ) {
     
     this.x = ( x !== undefined ) ? x : 0;
     this.y = ( y !== undefined ) ? y : 0;
     this.z = ( z !== undefined ) ? z : 0;
-
-    this.array = [this.x, this.y, this.z];
-
-  }
-
-  getAsArray(): Array<number> {
-
-    this.array[0] = this.x;
-    this.array[1] = this.y;
-    this.array[2] = this.z;
-
-    return this.array;
 
   }
 

@@ -1,17 +1,8 @@
 import { Uniform } from './Uniform';
 import { Vector3 } from '../../math/Vector3';
 
-interface UBOElement {
-  name: string;
-  type: string;
-  offset: number;
-  dataLen: number;
-  chunkLen: number;
-  arylen: number;
-}
-
 interface UBOItems {
-  [key: string]: {offset: number; dataLen: number; chunkLen: number};
+  [key: string]: Uniform;
 }
 
 interface UBOCache {
@@ -31,20 +22,13 @@ export class UBO {
   buffer: WebGLBuffer | null;
   static cache: UBOCache;
 
-	constructor(gl: WebGL2RenderingContext, name: string, blockPoint: number, bufSize: number, aryCalc: Array<UBOElement>){
+	constructor(gl: WebGL2RenderingContext, name: string, blockPoint: number, bufSize: number, aryCalc: Array<Uniform>){
 		this.items = {};
 		this.keys = [];
 		
 		for(let i=0; i < aryCalc.length; i++){
-
-			this.items[aryCalc[i].name]	= {
-        offset: aryCalc[i].offset, 
-        dataLen: aryCalc[i].dataLen, 
-        chunkLen: aryCalc[i].chunkLen
-      };
-
+			this.items[aryCalc[i].name]	= aryCalc[i];
       this.keys[i] = aryCalc[i].name;
-      
 		}
 		
 		this.gl = gl;
@@ -60,32 +44,18 @@ export class UBO {
 	}
 
 	// This function has low performance!
-	update(name: string, data: Array<number> | Float32Array | Vector3 | number): this{
-
-		if( !(data instanceof Float32Array) ) {
-			if (Array.isArray(data)) data = new Float32Array(data);
-			else if (data instanceof Vector3) {
-				data = new Float32Array([data.x, data.y, data.z]);
-			} else data = new Float32Array([data]);
-    }
-
+	update(name: string, data: Array<number> | Vector3 | number): this {
+		const uniform = this.items[name];
+		const arr = uniform.updateAry( data );
+		const offset = uniform.offset;
 		this.gl.bindBuffer(this.gl.UNIFORM_BUFFER, this.buffer);
-		this.gl.bufferSubData(this.gl.UNIFORM_BUFFER, this.items[name].offset, data, 0);
+		this.gl.bufferSubData(this.gl.UNIFORM_BUFFER, offset, arr, 0);
 		this.gl.bindBuffer(this.gl.UNIFORM_BUFFER, null);
 		return this;
 	}
 
 	static create(gl: WebGL2RenderingContext, blockName: string, blockPoint: number, uniforms: Array<Uniform>): void {
-    const ary = [...uniforms].map(u => {
-      return {
-        name: u.name,
-        type: u.type,
-        offset: 0,
-        dataLen: 0,
-        chunkLen: 0,
-        arylen: 0,
-      };
-    });
+    const ary = [...uniforms];
 		const bufSize = UBO.calculate(ary);
 		UBO.cache[blockName] = new UBO(gl, blockName, blockPoint, bufSize, ary);
 	}
@@ -101,7 +71,7 @@ export class UBO {
 		}
 	}
 
-	static calculate(ary: Array<UBOElement>): number {
+	static calculate(ary: Array<Uniform>): number {
 		let chunk = 16,
 			tsize = 0,
 			offset = 0,

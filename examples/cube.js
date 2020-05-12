@@ -26,7 +26,7 @@ export function cube() {
   camera.rotateY( Math.PI );
   camera.setActive();
 
-  const N = 10;
+  const N = 8;
   const W = 20;
   const size = W / N;
   const center = new VALO.Vector3(0, 0, 0);

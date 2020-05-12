@@ -1,4 +1,3 @@
-import { Matrix4 } from '../math/Matrix4';
 import { Object3D } from './Object3D';
 import { Geometry } from '../geometries/Geometry';
 import { Material } from '../materials/Material';
