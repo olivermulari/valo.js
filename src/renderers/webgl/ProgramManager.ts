@@ -65,6 +65,7 @@ export class ProgramManager {
       vert = [
 
         '#version 300 es',
+        'precision mediump float;',
 
         'in vec4 a_position;',
 
@@ -82,7 +83,6 @@ export class ProgramManager {
       frag = [
 
         '#version 300 es',
-
         'precision mediump float;',
         
         'uniform vec4 u_color;',
@@ -101,17 +101,20 @@ export class ProgramManager {
       vert = [
 
         '#version 300 es',
+        'precision mediump float;',
 
         'in vec4 a_position;',
 
         normals ? 'in vec3 a_normal;' : '',
         normals ? 'out vec3 v_normal;' : '',
 
-        'uniform mat4 u_worldViewProjection;',
-        normals ? 'uniform mat4 u_world;' : '',
+        'uniform Transform{',
+          'mat4 world;',
+          'mat4 worldViewProjection;',
+        '};',
 
         'void main() {',
-          'gl_Position = u_worldViewProjection * a_position;',
+          'gl_Position = worldViewProjection * world * a_position;',
 
           normals ? 'v_normal = mat3(u_world) * a_normal;' : '',
         '}'
@@ -121,7 +124,6 @@ export class ProgramManager {
       frag = [
 
         '#version 300 es',
-
         'precision mediump float;',
 
         normals ? 'in vec3 v_normal;' : '',
@@ -147,6 +149,7 @@ export class ProgramManager {
       vert = [
 
         '#version 300 es',
+        'precision mediump float;',
   
         'in vec4 a_position;',
         'in vec3 a_normal;',
@@ -173,7 +176,7 @@ export class ProgramManager {
 
           'v_normal = mat3(worldInverseTranspose) * a_normal;',
 
-          'gl_Position = worldViewProjection * a_position;',
+          'gl_Position = worldViewProjection * world * a_position;',
         '}'
   
       ].join('\n');
@@ -181,7 +184,6 @@ export class ProgramManager {
       frag = [
   
         '#version 300 es',
-  
         'precision mediump float;',
   
         'in vec3 v_normal;',

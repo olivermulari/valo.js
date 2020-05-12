@@ -71,7 +71,7 @@ export class UBO {
 
 		this.gl.bindBuffer(this.gl.UNIFORM_BUFFER, this.buffer);
 		this.gl.bufferSubData(this.gl.UNIFORM_BUFFER, this.items[name].offset, data, 0);
-		this.gl.bindBuffer(this.gl.UNIFORM_BUFFER,null);
+		this.gl.bindBuffer(this.gl.UNIFORM_BUFFER, null);
 		return this;
 	}
 

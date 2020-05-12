@@ -101,7 +101,6 @@ export class WebGLRenderer {
       new Uniform('worldViewProjection', 'mat4'),
       new Uniform('worldInverseTranspose', 'mat4'),
     ]);
-    /*
     UBO.create(gl, 'Material', 1, [
       new Uniform('matAmbient', 'vec3'),
       new Uniform('matDiffuse', 'vec3'),
@@ -111,7 +110,7 @@ export class WebGLRenderer {
       new Uniform('lightAmbient', 'vec3'),
       new Uniform('lightDiffuse', 'vec3'),
       new Uniform('lightSpecular', 'vec3'),
-    ]);*/
+    ]);
 
     this.canvas = canvas;
     this.gl = gl;
