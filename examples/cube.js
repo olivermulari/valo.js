@@ -7,6 +7,19 @@ function map(t, x, y, a, b) {
   return a + (t - x) * (b - a) / (y - x);
 }
 
+const _v3 = new VALO.Vector3();
+
+function toBall( mesh ) {
+  mesh.position.add(_v3.copy(mesh.position).multiply(0.01));
+  if (mesh.position.mag() > 20) {
+    mesh.position.normalize().multiply(20);
+  }
+}
+
+function toInit( mesh ) {
+  mesh.position.add(_v3.copy(mesh.initialPosition).subtract(mesh.position).multiply(0.02));
+}
+
 export function cube() {
 
   const renderer = new VALO.WebGLRenderer({ 
@@ -55,6 +68,7 @@ export function cube() {
           bc.applyScale(map(scaleFactor, 10, 15, 0.4, 1.0));
 
           bc.material = mat;
+          bc.initialPosition = new VALO.Vector3().copy(bc.position);
           scene.add(bc);
           boxes.push(bc);
         }
@@ -63,14 +77,25 @@ export function cube() {
   }
 
   const _yAxis = new VALO.Vector3(0, 1, 0);
+  const _xAxis = new VALO.Vector3(0, 1, 0);
 
+  let frames = 0;
   renderer.runRenderLoop(() => {
 
-
     renderer.render(scene);
+    frames++;
+
     camera.position.applyAxisAngle(_yAxis, 0.015);
-    camera.position.applyAxisAngle(new VALO.Vector3(1, 0, 0), 0.015);
+    camera.position.applyAxisAngle(_xAxis, 0.015);
     camera.update();
+
+
+    if (Math.sin(frames / 30) > 0.0) {
+      boxes.forEach(toBall);
+    } else {
+      boxes.forEach(toInit);
+    }
+    
 
   });
 }
