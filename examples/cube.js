@@ -26,7 +26,7 @@ export function cube() {
   camera.rotateY( Math.PI );
   camera.setActive();
 
-  const N = 5;
+  const N = 10;
   const W = 20;
   const size = W / N;
   const center = new VALO.Vector3(0, 0, 0);
@@ -65,6 +65,7 @@ export function cube() {
   const _yAxis = new VALO.Vector3(0, 1, 0);
 
   renderer.runRenderLoop(() => {
+
 
     renderer.render(scene);
     camera.position.applyAxisAngle(_yAxis, 0.015);

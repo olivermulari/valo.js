@@ -71,11 +71,10 @@ export class ProgramManager {
         'uniform Transform{',
           'mat4 world;',
           'mat4 worldViewProjection;',
-          'mat4 worldInverseTranspose;',
         '};',
 
         'void main() {',
-          'gl_Position = worldViewProjection * a_position;',
+          'gl_Position = worldViewProjection * world * a_position;',
         '}'
 
       ].join('\n');

@@ -59,6 +59,7 @@ export class UBO {
     
 	}
 
+	// This function has low performance!
 	update(name: string, data: Array<number> | Float32Array | Vector3 | number): this{
 
 		if( !(data instanceof Float32Array) ) {

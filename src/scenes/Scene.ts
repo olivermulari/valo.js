@@ -136,11 +136,11 @@ export class Scene {
 
     // UPDATE BOUNDING BOXES
 
-    this.meshes.forEach(obj => {
+    this.meshes.forEach(mesh => {
 
-      if (obj.boundingBox.positionsNeedsUpdate) {
+      if (mesh.boundingBox.positionsNeedsUpdate) {
 
-        obj.boundingBox.uptadePositions();
+        mesh.boundingBox.uptadePositions();
         
       }
 
@@ -148,23 +148,11 @@ export class Scene {
 
     // UPDATE WORLD MATRIXES
 
-    this.meshes.forEach( obj => obj.updateWorldMatrix() );
+    this.meshes.forEach( mesh => mesh.updateWorldMatrix() );
 
     // CHECK FRUSTUM
 
-    this.meshes.forEach( obj => obj.checkIsInFrustum( this ) );
-
-    // UPDATE VIEW MATRIXES
-
-    this.meshes.forEach( obj => {
-
-      if (obj.isInFrustum) {
-
-        obj.updateViewMatrix( this );
-
-      }
-      
-    });
+    this.meshes.forEach( mesh => mesh.checkIsInFrustum( this ) );
 
   }
 
