@@ -168,7 +168,7 @@ export class WebGLRenderer {
     // update buffers in lists
 
     if ( scene.buffersNeedUpdate ) {
-
+      
       scene.renderLists.forEach( list => {
 
         list.items.forEach(item => {

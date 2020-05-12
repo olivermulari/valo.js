@@ -19,6 +19,7 @@ export class Geometry {
   hasIndices: boolean;
   hasNormals: boolean;
   isBuffersSet: boolean;
+  isBuffersBind: boolean;
 
   constructor() {
 
@@ -32,6 +33,7 @@ export class Geometry {
     this.hasIndices = false;
 
     this.isBuffersSet = false;
+    this.isBuffersBind = false;
 
   }
 
@@ -39,6 +41,8 @@ export class Geometry {
    * Sets buffers
    */
   setBuffers(gl: WebGL2RenderingContext): void {
+
+    if (this.isBuffersSet) return;
 
     const vao = gl.createVertexArray();
 
@@ -60,12 +64,18 @@ export class Geometry {
 
     this.isBuffersSet = true;
 
+    gl.bindVertexArray(null);
+
   }
 
   /**
    * Binds the buffers with the given program
    */
   bindBuffers(gl: WebGL2RenderingContext, program: Program): void {
+
+    if (this.isBuffersBind) return;
+
+    gl.bindVertexArray(this.vao);
 
     if (this.hasPositions && program.A_POSITION !== -1) {
       this.attributes[ATTRIBUTE_LOCATION.POSITION].bindBufferWithProgram(gl, this, program);
@@ -78,6 +88,8 @@ export class Geometry {
     if (this.hasIndices) {
       // doesn't actually need binding at init -> not a vao
     }
+
+    gl.bindVertexArray(null);
 
   }
 
