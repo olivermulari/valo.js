@@ -52,6 +52,7 @@ async function loadAndSetCurrentFile() {
 // UI functions
 
 let isHidden = false;
+
 function toggleHideCode() {
   const textarea = document.getElementById("code");
   const button = document.getElementById("code-btn");
@@ -66,6 +67,21 @@ function toggleHideCode() {
   }
 }
 
+let mX = 0;
+function addFilterListener() {
+  window.addEventListener("pointermove", (e) => {
+    const x = e.clientX;
+    if (mX >= 250 && x < 250) {
+      const code = document.getElementById("code");
+      code.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    } else if (x >= 250 && mX < 250) {
+      const code = document.getElementById("code");
+      code.style.backgroundColor = "transparent";
+    }
+    mX = x;
+  })
+}
+
 function initUI() {
   document.getElementById("code-btn").onclick = toggleHideCode;
 }
@@ -73,6 +89,7 @@ function initUI() {
 function Main() {
   loadAndSetCurrentFile()
   initUI()
+  addFilterListener()
 }
 
 window.addEventListener('DOMContentLoaded', Main);
