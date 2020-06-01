@@ -410,4 +410,10 @@ export class WebGLRenderer {
     });
 
   }
+
+  destroy(): void {
+
+    // TODO: destroy this engine and scenes?
+
+  }
 }

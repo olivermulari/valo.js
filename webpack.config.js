@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-  entry: './examples/index.js',
+  entry: './playground/index.js',
   devtool: 'inline-source-map',
   devServer: {
     contentBase: path.join(__dirname, 'build'),
@@ -31,8 +32,13 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'examples', 'index.html'),
+      template: path.resolve(__dirname, 'playground', 'index.html'),
       filename: 'index.html'
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: path.resolve(__dirname, 'playground/examples'), to: 'examples' },
+      ],
     }),
   ]
 };

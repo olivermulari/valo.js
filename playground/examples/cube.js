@@ -1,8 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
-import VALO from '../src/index';
-
 function map(t, x, y, a, b) {
   return a + (t - x) * (b - a) / (y - x);
 }
@@ -20,7 +15,7 @@ function toInit( mesh ) {
   mesh.position.add(_v3.copy(mesh.initialPosition).subtract(mesh.position).multiply(0.02));
 }
 
-export function cube() {
+function createScene() {
 
   const renderer = new VALO.WebGLRenderer({ 
     clearBeforeRender: true,
@@ -39,7 +34,7 @@ export function cube() {
   camera.rotateY( Math.PI );
   camera.setActive();
 
-  const N = 8;
+  const N = 4;
   const W = 20;
   const size = W / N;
   const center = new VALO.Vector3(0, 0, 0);
@@ -85,8 +80,8 @@ export function cube() {
     renderer.render(scene);
     frames++;
 
-    camera.position.applyAxisAngle(_yAxis, 0.015);
-    camera.position.applyAxisAngle(_xAxis, 0.015);
+    camera.position.applyAxisAngle(_yAxis, 0.01);
+    camera.position.applyAxisAngle(_xAxis, 0.01);
     camera.update();
 
 
@@ -98,4 +93,6 @@ export function cube() {
     
 
   });
+
+  return renderer;
 }

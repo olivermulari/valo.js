@@ -1,9 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
-import { cube } from './cube.js';
-import VALO from '../src/index';
-
 function createScene() {
 
   const renderer = new VALO.WebGLRenderer({ 
@@ -58,5 +52,3 @@ function createScene() {
 
   });
 }
-
-window.addEventListener('DOMContentLoaded', cube);
