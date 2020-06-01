@@ -27,11 +27,7 @@ function runCode(script) {
 }
 
 async function loadText(name) {
-  let url = `https://raw.githubusercontent.com/olivermulari/valo.js/master/build/examples/${name}.js`;
-
-  if (process.env.NODE_ENV === 'development') {
-    url = `examples/${name}.js`;
-  }
+  let url = `examples/${name}.js`;
 
   return fetch(url)
     .then((res) => res.text())
