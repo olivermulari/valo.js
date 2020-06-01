@@ -73,7 +73,7 @@ function addFilterListener() {
     const x = e.clientX;
     if (mX >= 250 && x < 250) {
       const code = document.getElementById("code");
-      code.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+      code.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
     } else if (x >= 250 && mX < 250) {
       const code = document.getElementById("code");
       code.style.backgroundColor = "transparent";
