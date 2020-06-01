@@ -34,7 +34,7 @@ function createScene() {
   camera.rotateY( Math.PI );
   camera.setActive();
 
-  const N = 4;
+  const N = 8;
   const W = 20;
   const size = W / N;
   const center = new VALO.Vector3(0, 0, 0);
