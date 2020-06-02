@@ -1,6 +1,7 @@
 import { UBO } from './UBO';
 import { Geometry } from '../../geometries/Geometry';
 import { ATTRIBUTE_LOCATION } from '../../geometries/Geometry';
+import { Vector3 } from '../../math/Vector3';
 
 export class Program {
 
@@ -118,11 +119,17 @@ export class Program {
     for (let i = 0; i < args.length; i += 2) {
       const nm = args[i], ary = args[i+1];
 
-      if (typeof nm === 'string' && ary instanceof Array) {
+      if (typeof nm === 'string') {
         name = nm;
-        array = ary;
       }
-      
+
+      // TODO: This is very slow
+      if (ary instanceof Array) {
+        array = ary;
+      } else if (ary instanceof Vector3) {
+        array = [ary.x, ary.y, ary.z];
+      }
+
       if ( this.uniforms[name] === undefined || array === undefined ){ console.log('uniform not found ' + name); return this; }
 
       switch(this.uniforms[name].type){
@@ -139,8 +146,6 @@ export class Program {
   }
 
   preRender( ...args: unknown[] ): this {
-
-    this.gl.useProgram(this.WebGLProgram); //Save a function call and just activate this shader program on preRender
 
 		//If passing in arguments, then lets push that to setUniforms for handling. Make less line needed in the main program by having preRender handle Uniforms
     if (args.length > 0) this.setUniforms(args);

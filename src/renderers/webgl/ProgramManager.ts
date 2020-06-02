@@ -251,14 +251,15 @@ export class ProgramManager {
     } else if (mesh.material instanceof StandardMaterial) {
 
       program.setAttribLocations(gl, true);
+      
+      program.prepareUniformBlocks(
+        UBO.cache['Material'], 1,
+        UBO.cache['Light'], 2,
+      );
 
       program.prepareUniforms(
         'u_reverseLightDirection', 'vec3',
         'u_viewPosition', 'vec3',
-      );
-      program.prepareUniformBlocks(
-        UBO.cache['Material'], 1,
-        UBO.cache['Light'], 2,
       );
 
     }
