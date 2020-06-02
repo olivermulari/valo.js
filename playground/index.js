@@ -1,6 +1,6 @@
 import VALO from '../src/index';
 
-const examples = ["cube", "test"];
+const examples = ["basic", "cube"];
 const DEFAULT = "cube";
 let renderer;
 
