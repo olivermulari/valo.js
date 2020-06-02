@@ -35,8 +35,51 @@ async function loadText(name) {
     .catch((err) => console.log(err));
 }
 
+function getParams(url) {
+	var params = {};
+	var parser = document.createElement('a');
+	parser.href = url;
+	var query = parser.search.substring(1);
+	var vars = query.split('&');
+	for (var i = 0; i < vars.length; i++) {
+		var pair = vars[i].split('=');
+		params[pair[0]] = decodeURIComponent(pair[1]);
+	}
+	return params;
+}
+
+function updateQueryStringParameter(uri, key, value) {
+  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+  if (uri.match(re)) {
+    return uri.replace(re, '$1' + key + "=" + value + '$2');
+  }
+  else {
+    return uri + separator + key + "=" + value;
+  }
+}
+
+/**
+ * Set scene to given query parameter.
+ * If no query parameters, set to default
+ */
+function figureQueryParams() {
+  const params = getParams(window.location.href);
+  const name = params.scene;
+  if (name === undefined) {
+    return DEFAULT;
+  } else {
+    return name;
+  }
+}
+
 async function loadAndSetCurrentFile() {
-  const text = await loadText("cube");
+  let name = figureQueryParams();
+  if (!examples.includes(name)) {
+    console.error("No such sceneoption available");
+    name = DEFAULT;
+  }
+  const text = await loadText(name);
 
   if (!text) {
     console.error("Something went wrong when fetching text file");
@@ -47,12 +90,16 @@ async function loadAndSetCurrentFile() {
   textarea.value = text;
 
   runCode(text);
+
+  return name;
 }
 
 // UI functions
 
 let isHidden = false;
-
+/**
+ * Code visibility functionality
+ */
 function toggleHideCode() {
   const textarea = document.getElementById("code");
   const button = document.getElementById("code-btn");
@@ -68,6 +115,9 @@ function toggleHideCode() {
 }
 
 let mX = 0;
+/**
+ * Black filter when cursor is in the left side of the screen
+ */
 function addFilterListener() {
   window.addEventListener("pointermove", (e) => {
     const x = e.clientX;
@@ -82,14 +132,43 @@ function addFilterListener() {
   })
 }
 
-function initUI() {
-  document.getElementById("code-btn").onclick = toggleHideCode;
+function createOption(parent, i) {
+  const name = examples[i];
+  const option = document.createElement("option");
+  option.innerText = name;
+  option.value = name;
+  parent.appendChild(option);
 }
 
-function Main() {
-  loadAndSetCurrentFile()
-  initUI()
+/**
+ * Initializes the options for the select tag
+ */
+function setSceneOptions(name) {
+  const select = document.getElementById("scene-select");
+
+  const nameIdx = examples.findIndex((v) => v === name);
+  createOption(select, nameIdx);
+
+  for (let i = 0; i < examples.length; ++i) {
+    if (i !== nameIdx) {
+      createOption(select, i);
+    }
+  }
+
+  select.onchange = () => {
+    window.location.href = updateQueryStringParameter(window.location.href, "scene", select.value);
+  }
+}
+
+function initUI(name) {
+  document.getElementById("code-btn").onclick = toggleHideCode;
   addFilterListener()
+  setSceneOptions(name);
+}
+
+async function Main() {
+  const name = await loadAndSetCurrentFile();
+  initUI(name);
 }
 
 window.addEventListener('DOMContentLoaded', Main);
