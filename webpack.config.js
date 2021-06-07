@@ -4,9 +4,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
-module.exports = {
+module.exports = [{
   entry: {
-    valo: './src/index.ts',
+    valo: './src/valo.ts',
     playground: './playground/index.js',
   },
   devtool: 'inline-source-map',
@@ -32,6 +32,10 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'build'),
+    library: {
+      name: 'VALO',
+      type: 'commonjs',
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -44,4 +48,4 @@ module.exports = {
       ],
     }),
   ]
-};
+}];

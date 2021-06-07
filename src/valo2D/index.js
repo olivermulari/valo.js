@@ -28,7 +28,7 @@ const basicOptions = () => ({
 /**
  * Copyright 2019 Oliver Mulari
  */
-export default class VALO2D {
+export class VALO2D {
   /**
    * @param {object} options
    */
