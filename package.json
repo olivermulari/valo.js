@@ -1,8 +1,8 @@
 {
-  "name": "valo3d",
+  "name": "valo.js",
   "version": "0.1.0",
-  "description": "WebGL2 graphics engine",
-  "main": "index.js",
+  "description": "WebGL2 graphics library",
+  "main": "build/index.js",
   "scripts": {
     "start": "npm run dev",
     "dev": "webpack-dev-server --env.development",

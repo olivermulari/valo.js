@@ -5,7 +5,10 @@ const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-  entry: './playground/index.js',
+  entry: {
+    bundle: './src/index.ts',
+    playground: './playground/index.js',
+  },
   devtool: 'inline-source-map',
   devServer: {
     contentBase: path.join(__dirname, 'build'),
@@ -27,7 +30,7 @@ module.exports = {
     extensions: [ '.tsx', '.ts', '.js' ],
   },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'build'),
   },
   plugins: [
