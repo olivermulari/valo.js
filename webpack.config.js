@@ -6,7 +6,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    bundle: './src/index.ts',
+    valo: './src/index.ts',
     playground: './playground/index.js',
   },
   devtool: 'inline-source-map',
