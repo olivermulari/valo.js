@@ -1,4 +1,4 @@
-import * as VALO from '../src/valo';
+import VALO from "../src/valo"
 
 const examples = ["basic", "cube"];
 const DEFAULT = "cube";

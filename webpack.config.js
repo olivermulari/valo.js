@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const path = require('path');
 
-module.exports = [{
+module.exports = {
   entry: {
     valo: './src/valo.ts',
     playground: './playground/index.js',
@@ -32,10 +32,8 @@ module.exports = [{
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'build'),
-    library: {
-      name: 'VALO',
-      type: 'commonjs',
-    }
+    libraryExport: 'default',
+    libraryTarget: 'commonjs',
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -46,6 +44,6 @@ module.exports = [{
       patterns: [
         { from: path.resolve(__dirname, 'playground/examples'), to: 'examples' },
       ],
-    }),
+    })
   ]
-}];
+};
