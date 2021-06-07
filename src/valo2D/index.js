@@ -27,10 +27,8 @@ const basicOptions = () => ({
 
 /**
  * Copyright 2019 Oliver Mulari
- * 
- * VALO.js is simple 2D graphics engine for WebGL2
  */
-export default class VALO {
+export default class VALO2D {
   /**
    * @param {object} options
    */
@@ -71,29 +69,29 @@ export default class VALO {
 
 // Some routing
 
-VALO.Scene = Scene;
-VALO.Renderer2D = Renderer2D;
+VALO2D.Scene = Scene;
+VALO2D.Renderer2D = Renderer2D;
 
 // Shapes
 
-VALO.Circle = Circle;
-VALO.Rectangle = Rectangle;
-VALO.CustomShape = CustomShape;
+VALO2D.Circle = Circle;
+VALO2D.Rectangle = Rectangle;
+VALO2D.CustomShape = CustomShape;
 
 // Geometry
 
-VALO.VertexData = VertexData;
+VALO2D.VertexData = VertexData;
 
 // Utils
 
-VALO.Vec2 = Vec2;
-VALO.Matrix3 = Matrix3;
-VALO.Color = Color;
+VALO2D.Vec2 = Vec2;
+VALO2D.Matrix3 = Matrix3;
+VALO2D.Color = Color;
 
-VALO.TextureLoader = TextureLoader;
-VALO.Program = Program;
+VALO2D.TextureLoader = TextureLoader;
+VALO2D.Program = Program;
 
 // Functions
 
 import { isMobile } from './utils/mobile';
-VALO.isMobile = isMobile;
+VALO2D.isMobile = isMobile;
