@@ -6,6 +6,7 @@
   "files": [
     "build/valo.js",
     "package.json",
+    "LICENSE",
     "README.md",
     "src"
   ],
