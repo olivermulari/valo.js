@@ -3,6 +3,12 @@
   "version": "0.0.1",
   "description": "WebGL2 graphics library",
   "main": "build/valo.js",
+  "files": [
+    "build/valo.js",
+    "package.json",
+    "README.md",
+    "src"
+  ],
   "scripts": {
     "start": "npm run dev",
     "dev": "webpack-dev-server --env.development",
