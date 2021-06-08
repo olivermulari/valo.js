@@ -1,6 +1,6 @@
 {
   "name": "valo.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "WebGL2 graphics library",
   "main": "build/valo.js",
   "files": [
