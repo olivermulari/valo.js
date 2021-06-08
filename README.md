@@ -1,4 +1,6 @@
-# VALO.js – 3D WebGL2 graphics library made with typescript.
+VALO.js – 3D WebGL2 graphics library made with typescript.
+=======
+[![NPM version](https://badgen.net/npm/v/valo.js)](https://www.npmjs.com/package/valo.js)
 
 ## Features
 - Materials using Phong reflection model
