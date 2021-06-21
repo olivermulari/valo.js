@@ -179,13 +179,8 @@ export default class Renderer2D {
     
     if (shape.programInfo.hasTexture) {
       const texture = shape.programInfo.texture;
-      const no = texture.number;
-
-      if (this.previousTextureNumber !== no) {
-        gl.activeTexture(no);
-        gl.bindTexture(gl.TEXTURE_2D, texture.texture);
-        gl.uniform1i(program.U_TEXTURE, 0);
-      }
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, texture.texture);
     }
   }
 
