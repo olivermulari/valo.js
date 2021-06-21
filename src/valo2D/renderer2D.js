@@ -181,13 +181,8 @@ export default class Renderer2D {
       const texture = shape.programInfo.texture;
       const no = texture.number;
 
-      // beacuse there is only one program for textures
-      // we don't need to check if programs match
-      // with the previous texture
-
       if (this.previousTextureNumber !== no) {
-        this.previousTextureNumber = no;
-        gl.activeTexture(gl.TEXTURE0 + no);
+        gl.activeTexture(no);
         gl.bindTexture(gl.TEXTURE_2D, texture.texture);
         gl.uniform1i(program.U_TEXTURE, 0);
       }
